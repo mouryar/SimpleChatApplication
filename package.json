@@ -1,0 +1,22 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm server.js"
+  },
+  "author": "Mourya",
+  "license": "ISC",
+  "engines": {
+    "node": "4.4.3"
+  },
+  "dependencies": {
+    "connect-mongo": "^1.1.0",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "express-session": "^1.12.1",
+    "mongoose": "^4.3.1"
+  }
+}
