@@ -5,6 +5,7 @@ const session = require('./session');
 const helper = require('./helpers');
 const passport = require('passport');
 const auth = require('./auth')();
+const config = require('./config');
 
 
 router.get('/',(req,res,next) => {
@@ -13,7 +14,8 @@ router.get('/',(req,res,next) => {
 
 router.get('/rooms',[helper.isUserAuthenticated,(req,res,next) => {
     res.render('rooms',{
-        user: req.user
+        user: req.user,
+        host: config.host
     });
 }]);
 
@@ -59,7 +61,22 @@ router.get('*',(req,res,next) => {
     res.status(404).sendFile(process.cwd() + '/views/404.htm');
 });
 
+//create IO server instance
+
+let ioServer = app => {
+    app.locals.chatrooms = [];
+    const server = require('http').Server(app);
+    const io = require('socket.io')(server);
+    //It runs for every socket that is connected to server
+    io.use((socket, next) => {
+        require('./session')(socket.request, {}, next);
+    });
+    require('./socket')(io,app);
+    return server;
+}
+
 module.exports = {
     router,
-    session
+    session,
+    ioServer
 }

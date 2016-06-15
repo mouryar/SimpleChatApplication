@@ -22,6 +22,6 @@ app.get('/dashboard', (req,res,next) => {
     res.send("<h1> I am back dashboard "+req.hello+"</h1>");
 });
 
-app.listen(app.get('port'), () =>{
+chatCat.ioServer(app).listen(app.get('port'), () =>{
     console.log("Application running on port 3000");
 });
