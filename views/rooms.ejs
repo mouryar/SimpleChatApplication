@@ -10,7 +10,7 @@
 		'use strict';
 		$(() =>{
 			let socket = io('<%= host %>/roomsList');//Rooms list is not a route. This is known as socket name space
-			socket.on('connect', ()=> console.log('Connected to server'));
+			//socket.on('connect', ()=> console.log('Connected to server'));
 		});
 		
 		
