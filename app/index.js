@@ -2,27 +2,58 @@
 
 const router = require('express').Router();
 const session = require('./session');
+const helper = require('./helpers');
+const passport = require('passport');
+const auth = require('./auth')();
+
 
 router.get('/',(req,res,next) => {
     res.render('login');
 });
 
-router.get('/rooms',(req,res,next) => {
-    res.render('rooms');
+router.get('/rooms',[helper.isUserAuthenticated,(req,res,next) => {
+    res.render('rooms',{
+        user: req.user
+    });
+}]);
+
+router.get('/chats',[helper.isUserAuthenticated,(req,res,next) => {
+    res.render('chatroom',{
+        user: req.user
+    });
+}]);
+
+router.get('/logout',(req,res,next) => {
+    req.logout();
+    res.redirect('/');
 });
 
-router.get('/chats',(req,res,next) => {
-    res.render('chatroom');
-});
-
-router.get('/getSession',(req,res,next) => {
+/*router.get('/getSession',(req,res,next) => {
     res.send('My name is: '+ req.session.favColour);
 });
 
 router.get('/setSession',(req,res,next) => {
     req.session.favColour = 'Mourya';
     res.send('Session Created');
-});
+});*/
+router.get('/auth/facebook',passport.authenticate('facebook'));
+
+router.get('/auth/facebook/callback',
+    passport.authenticate('facebook',{
+        successRedirect:'/rooms',
+        failureRedirect:'/'
+    })
+ );
+ 
+ router.get('/auth/twitter',passport.authenticate('twitter'));
+
+router.get('/auth/twitter/callback',
+    passport.authenticate('twitter',{
+        successRedirect:'/rooms',
+        failureRedirect:'/'
+    })
+ );
+
 
 router.get('*',(req,res,next) => {
     res.status(404).sendFile(process.cwd() + '/views/404.htm');
